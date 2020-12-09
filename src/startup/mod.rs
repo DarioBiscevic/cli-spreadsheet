@@ -1,8 +1,11 @@
 use crate::spreadsheet::*;
 
-pub fn loader() -> Spreadsheet{Spreadsheet::new()
+const CELLS: usize = 26;
+
+pub fn loader(filename: String) -> Spreadsheet{
+    Spreadsheet::new(CELLS)
 }
 
-pub fn creator() -> Spreadsheet{
-    Spreadsheet::new()
+pub fn creator(filename: String) -> Spreadsheet{
+    Spreadsheet::new(CELLS)
 }

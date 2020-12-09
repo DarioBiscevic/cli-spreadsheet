@@ -13,10 +13,10 @@ fn main() {
 
         match mode{
             Settings::Load(filename) => {
-                spreadsheet = startup::loader();
+                spreadsheet = startup::loader(filename);
             },
             Settings::Create(filename) => {
-                spreadsheet = startup::creator();
+                spreadsheet = startup::creator(filename);
             },
         }
 
