@@ -2,14 +2,28 @@ use std::env;
 
 mod lib;
 mod startup;
+mod spreadsheet;
 
 fn main() {
     println!("cli-spreadsheet");
 
-    match parse_args(){
-        Settings::Load   => ,
-        Settings::Create => ,
-        _                => println!("Argument error"),
+    if let Ok(mode) = parse_args(){
+
+        let mut spreadsheet: spreadsheet::Spreadsheet;
+
+        match mode{
+            Settings::Load(filename) => {
+                spreadsheet = startup::loader();
+            },
+            Settings::Create(filename) => {
+                spreadsheet = startup::creator();
+            },
+        }
+
+        //Main process
+        lib::run(spreadsheet);
+    }else{
+        println!("Argument error");
     }
 }
 
@@ -26,12 +40,13 @@ fn parse_args() -> Result<Settings, ()>{
     if args.len() < 3 {
         Err(())
     }else{
+
         if args[1] == "load"{
-            Ok(Settings::Load(args[2].clone())
+            return Ok(Settings::Load(args[2].clone()))
         }else if args[1] == "create"{
-            Ok(Settings::Create(args[2].clone())
-        }else{
-            Err(())
+            return Ok(Settings::Create(args[2].clone()))
         }
+
+        Err(())
     }
 }
