@@ -2,7 +2,7 @@ use crate::spreadsheet::*;
 
 use std::io::{stdin,stdout,Write};
 
-pub fn run(sheet: Spreadsheet){
+pub fn run(sheet: &mut Spreadsheet){
 
     let mut is_looping = true;
 
