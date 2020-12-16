@@ -1,2 +1,2 @@
 # Notes
-Lines start counting from 1
+Lines start counting from 0
