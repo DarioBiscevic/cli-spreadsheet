@@ -35,6 +35,9 @@ impl Spreadsheet{
                 if x_coord >= self.max_x || y_coord >= self.max_y{
                     println!("{}: Empty", cell);
                     println!("0");
+                }else{
+                    println!("{}: {}", cell, self.cells[x_coord][y_coord].expression);
+                    println!("{}", self.cells[x_coord][y_coord].value)
                 }
             }
 
@@ -54,20 +57,33 @@ impl Spreadsheet{
             
 
                 if let Some((x_coord, y_coord)) = Spreadsheet::parse_cell_name(cell){
+
+                    println!("{}, {}    {}, {}", x_coord, y_coord, self.max_x, self.max_y);
+
+
                     if x_coord < self.max_x && y_coord < self.max_y{
-                        println!("Henlo");
+                        self.cells[x_coord][y_coord].set(expression);
                     }else{
                         //Calculate the number of additional columns and rows needed and add them
                         let add_cols = (x_coord as i64) - (self.max_x as i64) + 1;
                         let add_rows = (y_coord as i64) - (self.max_y as i64) + 1;
 
+                        if add_cols > 0 { self.max_x += add_cols as usize; }
+                        if add_rows > 0 { self.max_y += add_rows as usize; }
+
+                        println!("{}, {}", add_cols, add_rows);
+
                         for _ in 0..add_cols{
                             self.cells.push(Vec::new());
                         }
 
+                        println!("{}", self.cells.len());
+
                         for _ in 0..add_rows{
                             self.cells[x_coord].push(Cell::new((x_coord, y_coord)));
                         }
+
+                        println!("{}", self.cells[x_coord].len());
 
                         self.cells[x_coord][y_coord].set(expression);
 
@@ -113,7 +129,6 @@ impl Spreadsheet{
         //TODO: improve this with error handling
         let y_coord: usize = y_string.parse().unwrap();
 
-        //VIEW NOTES: lines start counting from 1
-        Some((x_coord, y_coord + 1))
+        Some((x_coord, y_coord))
     }
 }
