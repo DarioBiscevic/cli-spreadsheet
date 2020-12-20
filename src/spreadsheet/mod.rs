@@ -1,18 +1,19 @@
-mod cell;
-
-use cell::*;
+use crate::cell::*;
 
 pub struct Spreadsheet{
+
+    pub filename: String,
+
     max_x: usize,
     max_y: usize,
     
     //First vector is "horizontal" --> holds the vectors for the columns
-    cells: Vec< Vec<Cell> >,
+    pub cells: Vec< Vec<Cell> >,
 }
 
 impl Spreadsheet{
 
-    pub fn new(n_cells: usize) -> Self{
+    pub fn new(filename: String, n_cells: usize) -> Self{
 
         let mut cells = Vec::new();
 
@@ -21,6 +22,7 @@ impl Spreadsheet{
         }
 
         Spreadsheet{
+            filename,
             max_x: n_cells,
             max_y: 0,
             cells,
@@ -32,12 +34,18 @@ impl Spreadsheet{
         if let Some(cell) = cell_arg{
 
             if let Some((x_coord, y_coord)) = Spreadsheet::parse_cell_name(cell){
-                if x_coord >= self.max_x || y_coord >= self.max_y{
+                if x_coord >= self.max_x{
                     println!("{}: Empty", cell);
                     println!("0");
                 }else{
-                    println!("{}: {}", cell, self.cells[x_coord][y_coord].expression);
-                    println!("{}", self.cells[x_coord][y_coord].value)
+
+                    if y_coord >= self.cells[x_coord].len(){
+                        println!("{}: Empty", cell);
+                        println!("0");
+                    }else{
+                        println!("{}: {}", cell, self.cells[x_coord][y_coord].expression);
+                        println!("{}", self.cells[x_coord][y_coord].value);
+                    }
                 }
             }
 
@@ -50,45 +58,28 @@ impl Spreadsheet{
     pub fn set(&mut self, cell_arg: Option<&str>, expression_arg: Option<&str>){
 
         if let Some(cell) = cell_arg{
-            //println!("{:?}", cell);
 
             if let Some(expression) = expression_arg{
-                //println!("{:?}", expression);
-            
 
                 if let Some((x_coord, y_coord)) = Spreadsheet::parse_cell_name(cell){
 
-                    println!("{}, {}    {}, {}", x_coord, y_coord, self.max_x, self.max_y);
+                    //Calculate the number of additional columns and rows needed and add them
+                    let add_cols = (x_coord as i64) - (self.max_x as i64) + 1;
 
+                    if add_cols > 0 { self.max_x += add_cols as usize; }
 
-                    if x_coord < self.max_x && y_coord < self.max_y{
-                        self.cells[x_coord][y_coord].set(expression);
-                    }else{
-                        //Calculate the number of additional columns and rows needed and add them
-                        let add_cols = (x_coord as i64) - (self.max_x as i64) + 1;
-                        let add_rows = (y_coord as i64) - (self.max_y as i64) + 1;
-
-                        if add_cols > 0 { self.max_x += add_cols as usize; }
-                        if add_rows > 0 { self.max_y += add_rows as usize; }
-
-                        println!("{}, {}", add_cols, add_rows);
-
-                        for _ in 0..add_cols{
-                            self.cells.push(Vec::new());
-                        }
-
-                        println!("{}", self.cells.len());
-
-                        for _ in 0..add_rows{
-                            self.cells[x_coord].push(Cell::new((x_coord, y_coord)));
-                        }
-
-                        println!("{}", self.cells[x_coord].len());
-
-                        self.cells[x_coord][y_coord].set(expression);
-
-                        //println!("Cell: {}", self.cells[x_coord][y_coord].expression);
+                    for _ in 0..add_cols{
+                        self.cells.push(Vec::new());
                     }
+
+                    let add_rows = (y_coord as i64) - (self.cells[x_coord].len() as i64) + 1;
+
+                    for _ in 0..add_rows{
+                        self.cells[x_coord].push(Cell::new(None, (x_coord, y_coord)));
+                    }
+
+                    self.cells[x_coord][y_coord].set(expression);
+                    self.cells[x_coord][y_coord].name = Some(String::from(cell));
                 }
 
             }else{

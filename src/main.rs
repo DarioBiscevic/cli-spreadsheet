@@ -3,6 +3,7 @@ use std::env;
 mod lib;
 mod startup;
 mod spreadsheet;
+mod cell;
 
 fn main() {
     println!("cli-spreadsheet");
