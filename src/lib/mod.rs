@@ -1,4 +1,5 @@
 use crate::spreadsheet::*;
+use crate::cell::*;
 
 use std::io::{stdin,stdout,Write};
 
@@ -37,6 +38,25 @@ pub fn run(sheet: &mut Spreadsheet){
 
         }
     }
+
+    println!("Save? [y(es) / n(o)]");
+    let _ = stdout().flush();
+
+    loop{
+        let input = command_input();
+
+        if let Ok(c) = input{
+
+            let letters: Vec<_> = c.chars().collect();
+
+            if letters[0].to_ascii_lowercase() == 'y'{
+
+                save(sheet);
+
+                break
+            }else if letters[0].to_ascii_lowercase() == 'n'{break}
+        }
+    }
 }
 
 fn command_input() -> Result<String, Box<dyn std::error::Error>>{
@@ -57,4 +77,33 @@ fn command_input() -> Result<String, Box<dyn std::error::Error>>{
     }
 
     Ok(input)
+}
+
+fn save(sheet: &Spreadsheet){
+
+    use std::fs::File;
+    use std::io::prelude::*;
+    use std::path::Path;
+
+    let path = Path::new(sheet.filename.as_str());
+    let display = path.display();
+
+    // Open a file in write-only mode, returns `io::Result<File>`
+    let mut file = match File::create(&path) {
+        Err(why) => panic!("couldn't create {}: {}", display, why),
+        Ok(file) => file,
+    };
+
+    let contents = sheet.cells
+        .iter()
+        .flatten()
+        .filter(|cell| cell.name.is_some())
+        .fold(String::new(), |acc, elem|{
+            format!("{}{}: {}\n", acc, elem.name.clone().unwrap(), elem.expression)
+        });
+
+    match file.write_all(contents.as_bytes()) {
+        Err(why) => panic!("couldn't write to {}: {}", display, why),
+        Ok(_) => println!("successfully wrote to {}", display),
+    }
 }
