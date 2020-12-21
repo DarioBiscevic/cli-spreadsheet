@@ -27,7 +27,7 @@ pub fn run(sheet: &mut Spreadsheet){
             }
 
 
-            println!("");
+            println!();
 
         }else if let Err(error) = input_result{
 
