@@ -4,8 +4,8 @@ pub struct Spreadsheet{
 
     pub filename: String,
 
+    //Number of columns allocated
     max_x: usize,
-    max_y: usize,
     
     //First vector is "horizontal" --> holds the vectors for the columns
     pub cells: Vec< Vec<Cell> >,
@@ -24,21 +24,31 @@ impl Spreadsheet{
         Spreadsheet{
             filename,
             max_x: n_cells,
-            max_y: 0,
             cells,
         }
     }
 
 
+    //Prints a cell's expression and value
+    /*
+    view [cell]
+
+    e.g. view B4
+        will print:
+        B4: <B4's expression>
+        <B4's value>
+
+    */
     pub fn view(&self, cell_arg: Option<&str>){
         if let Some(cell) = cell_arg{
 
             if let Some((x_coord, y_coord)) = Spreadsheet::parse_cell_name(cell){
                 if x_coord >= self.max_x{
+                    //If the x_coord-th column is not defined, the cell that must be viewed is definitely empty
                     println!("{}: Empty", cell);
                     println!("0");
                 }else{
-
+                    //If the y_coord-th row is not defined, the cell that must be viewed is definitely empty
                     if y_coord >= self.cells[x_coord].len(){
                         println!("{}: Empty", cell);
                         println!("0");
@@ -48,13 +58,19 @@ impl Spreadsheet{
                     }
                 }
             }
-
-            //println!("{:?}", (x_coord, y_coord));
         }else{
             println!("No argument given");
         }
     }
 
+
+    //Modifies a cell's expression
+    /*
+    set [cell] [expression]
+
+    e.g. set A2 "42"
+        A2's expression became "42"
+    */
     pub fn set(&mut self, cell_arg: Option<&str>, expression_arg: Option<&str>){
 
         if let Some(cell) = cell_arg{
@@ -78,8 +94,8 @@ impl Spreadsheet{
                         self.cells[x_coord].push(Cell::new(None, (x_coord, y_coord)));
                     }
 
-                    self.cells[x_coord][y_coord].set(expression);
-                    self.cells[x_coord][y_coord].name = Some(String::from(cell));
+                    self.cells[x_coord][y_coord].set_expr(expression);
+                    self.cells[x_coord][y_coord].set_name(cell);
                 }
 
             }else{

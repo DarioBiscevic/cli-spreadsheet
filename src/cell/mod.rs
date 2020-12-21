@@ -18,11 +18,23 @@ impl Cell{
         }
     }
 
-    pub fn set(&mut self, expression: &str){
+    pub fn set_expr(&mut self, expression: &str){
         self.expression = String::from(expression);
+    }
+
+    pub fn set_name(&mut self, name: &str){
+        self.name = Some(String::from(name));
     }
 }
 
+
+/*
+A cell's value can be of three types only:
+    - Literal: the output value is text
+    - Numeric: the output value is a number
+    - Empty:   the output value doesn't actually exist (not yet evaluated/empty cell)
+
+*/
 #[derive(Debug)]
 pub enum ValueType{
     Literal(String),
@@ -30,13 +42,10 @@ pub enum ValueType{
     Empty
 }
 
+//Display implementation of ValueType
 impl std::fmt::Display for ValueType{
 
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        // Write strictly the first element into the supplied output
-        // stream: `f`. Returns `fmt::Result` which indicates whether the
-        // operation succeeded or failed. Note that `write!` uses syntax which
-        // is very similar to `println!`.
         match self{
             ValueType::Literal(text)   => write!(f, "{}", text),
             ValueType::Numeric(number) => write!(f, "{}", number),

@@ -14,9 +14,9 @@ pub fn run(sheet: &mut Spreadsheet){
         if let Ok(command) = input_result{
 
             //TODO: ad hoc function to split the input in different parts
-
             let mut arguments = command.split(' '); //Temporary
             
+            //"arguments" is used as a "stack"; with ".next()" a value is popped as an Option<T>
             match arguments.next(){
                 Some("")            => {},
                 Some("exit")        => is_looping = false,
@@ -39,6 +39,8 @@ pub fn run(sheet: &mut Spreadsheet){
         }
     }
 
+    //Save question
+    //TODO: add "cancel" option
     println!("Save? [y(es) / n(o)]");
     let _ = stdout().flush();
 
@@ -88,12 +90,13 @@ fn save(sheet: &Spreadsheet){
     let path = Path::new(sheet.filename.as_str());
     let display = path.display();
 
-    // Open a file in write-only mode, returns `io::Result<File>`
     let mut file = match File::create(&path) {
-        Err(why) => panic!("couldn't create {}: {}", display, why),
+        Err(why) => panic!("Couldn't create {}: {}", display, why),
         Ok(file) => file,
     };
 
+    //Combine into a variable all the data that must be written to the save file;
+    //Add all the "defined" cells --> all the cells which have "cell.name" as a Some
     let contents = sheet.cells
         .iter()
         .flatten()
@@ -103,7 +106,7 @@ fn save(sheet: &Spreadsheet){
         });
 
     match file.write_all(contents.as_bytes()) {
-        Err(why) => panic!("couldn't write to {}: {}", display, why),
-        Ok(_) => println!("successfully wrote to {}", display),
+        Err(why) => panic!("Failed to save in {}: {}", display, why),
+        Ok(_) => println!("Successfully saved in {}", display),
     }
 }
