@@ -15,7 +15,7 @@ pub fn run(sheet: &mut Spreadsheet){
 
             //TODO: ad hoc function to split the input in different parts
             let mut arguments = command.split(' '); //Temporary
-            
+
             //"arguments" is used as a "stack"; with ".next()" a value is popped as an Option<T>
             match arguments.next(){
                 Some("")            => {},
@@ -25,7 +25,6 @@ pub fn run(sheet: &mut Spreadsheet){
                 Some(wrong_command) => println!("Command {:?} not recognised", wrong_command),
                 _                   => {},
             }
-
 
             println!();
 

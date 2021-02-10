@@ -1,4 +1,4 @@
-# cli-spreadsheet
+# cli-spreadsheet - WORK IN PROGRESS
 ## General Concept
 ```
 
