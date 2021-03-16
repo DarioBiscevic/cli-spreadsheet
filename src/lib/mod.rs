@@ -3,6 +3,7 @@ use crate::cell::*;
 
 use std::io::{stdin,stdout,Write};
 
+///The main function; it handles the input commands and calls the corresponding functions.
 pub fn run(sheet: &mut Spreadsheet){
 
     let mut is_looping = true;
@@ -25,6 +26,8 @@ pub fn run(sheet: &mut Spreadsheet){
                 Some(wrong_command) => println!("Command {:?} not recognised", wrong_command),
                 _                   => {},
             }
+
+            //TODO: evaluation function
 
             println!();
 
@@ -60,6 +63,7 @@ pub fn run(sheet: &mut Spreadsheet){
     }
 }
 
+///Gets user input.
 fn command_input() -> Result<String, Box<dyn std::error::Error>>{
 
     print!("> ");
@@ -80,6 +84,10 @@ fn command_input() -> Result<String, Box<dyn std::error::Error>>{
     Ok(input)
 }
 
+
+///Takes the data in the spreadsheet of all the defined cells and puts it into a human
+///readable file, where each line is composed of the name of the cell and the entered
+///expression (e.g.: "a3: 3 7 +").
 fn save(sheet: &Spreadsheet){
 
     use std::fs::File;

@@ -1,5 +1,13 @@
 # cli-spreadsheet - WORK IN PROGRESS
 ## General Concept
+This project aims to create a spreadsheet program completely based on the command line.
+As in every such office project, each cell holds an expression, which is then translated
+to a value; the way the expression is written, in this project, is a little bit different
+compared to the famous Excel, since it uses RPN: insted of typing "=42 + 7", as you would
+in any other spreadsheet system, in cli-spreadsheet you would write it as "=42 7 +", as it
+is easier to compute and, in a programming way, more logical. 
+
+## Visual Idea
 ```
 
 > draw A..C 1..3

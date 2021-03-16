@@ -1,5 +1,7 @@
 use std::fmt;
 
+///Holds the name, coordinates, expression and value of a cell; its data is then used for
+///computation or for saving the data inside a file.
 #[derive(Debug)]
 pub struct Cell{
     pub name:       Option<String>,

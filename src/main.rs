@@ -21,7 +21,7 @@ fn main() {
             },
         }
 
-        //Main process
+
         lib::run(&mut spreadsheet);
     }else{
         println!("Argument error");

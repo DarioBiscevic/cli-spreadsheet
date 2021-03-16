@@ -1,5 +1,6 @@
 use crate::cell::*;
 
+///Spreadsheet objects hold the two-dimensional array with all the cells.
 pub struct Spreadsheet{
 
     pub filename: String,
@@ -13,6 +14,7 @@ pub struct Spreadsheet{
 
 impl Spreadsheet{
 
+    ///Creates a new spreadsheet.
     pub fn new(filename: String, n_cells: usize) -> Self{
 
         let mut cells = Vec::new();
@@ -29,16 +31,17 @@ impl Spreadsheet{
     }
 
 
-    //Prints a cell's expression and value
-    /*
-    view [cell]
+    ///Prints a cell's expression and value:
+    ///
+    ///view [cell]
+    ///e.g. view B4
+    ///
+    ///Will print:
+    ///
+    ///B4: <B4's expression>
+    ///
+    ///    <B4's value>
 
-    e.g. view B4
-        will print:
-        B4: <B4's expression>
-        <B4's value>
-
-    */
     pub fn view(&self, cell_arg: Option<&str>){
         if let Some(cell) = cell_arg{
 
@@ -64,13 +67,13 @@ impl Spreadsheet{
     }
 
 
-    //Modifies a cell's expression
-    /*
-    set [cell] [expression]
-
-    e.g. set A2 "42"
-        A2's expression became "42"
-    */
+    ///Modifies a cell's expression:
+    ///
+    ///set [cell] [expression]
+    ///e.g. set A2 "42"
+    ///
+    ///A2's expression becomes "42"
+    ///
     pub fn set(&mut self, cell_arg: Option<&str>, expression_arg: Option<&str>){
 
         if let Some(cell) = cell_arg{
@@ -108,6 +111,7 @@ impl Spreadsheet{
     }
 
 
+    ///Converts the string cell name into coordinates to be used in the spreadsheet array.
     fn parse_cell_name(cell: &str) -> Option<(usize, usize)>{
 
         use std::convert::TryInto;
