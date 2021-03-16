@@ -41,7 +41,6 @@ impl Spreadsheet{
     ///B4: <B4's expression>
     ///
     ///    <B4's value>
-
     pub fn view(&self, cell_arg: Option<&str>){
         if let Some(cell) = cell_arg{
 
@@ -141,5 +140,18 @@ impl Spreadsheet{
         let y_coord: usize = y_string.parse().unwrap();
 
         Some((x_coord, y_coord))
+    }
+
+
+    ///Gives a "value" to each cell; if empty, evaluates as 0.
+    pub fn evaluate_cells(&mut self) -> Result<(), Vec<String>>{
+
+       /*
+        * if the cell's expression starts with an "=", it is a mathematical formula; otherwise,
+        * the value is the same as the expression.
+       */ 
+
+        //TEMPORARY
+        Ok(())
     }
 }

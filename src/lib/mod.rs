@@ -15,7 +15,7 @@ pub fn run(sheet: &mut Spreadsheet){
         if let Ok(command) = input_result{
 
             //TODO: ad hoc function to split the input in different parts
-            let mut arguments = command.split(' '); //Temporary
+            let mut arguments = command.split(' '); //TODO: split properly --> "set a4 "42 7 +" "=> "set"  "a4"  ""42 7 +""
 
             //"arguments" is used as a "stack"; with ".next()" a value is popped as an Option<T>
             match arguments.next(){
@@ -28,6 +28,11 @@ pub fn run(sheet: &mut Spreadsheet){
             }
 
             //TODO: evaluation function
+            if let Err(all_errors) = sheet.evaluate_cells(){
+                for error in all_errors.iter(){
+                    println!("ERROR: {}", error);
+                }
+            }
 
             println!();
 
