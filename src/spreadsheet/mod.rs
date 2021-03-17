@@ -56,7 +56,7 @@ impl Spreadsheet{
                         println!("0");
                     }else{
                         println!("{}: {}", cell, self.cells[x_coord][y_coord].expression);
-                        println!("{}", self.cells[x_coord][y_coord].value);
+                        println!("{:?}", self.cells[x_coord][y_coord].value);
                     }
                 }
             }
@@ -147,9 +147,30 @@ impl Spreadsheet{
     pub fn evaluate_cells(&mut self) -> Result<(), Vec<String>>{
 
        /*
+        * For every cell:
         * if the cell's expression starts with an "=", it is a mathematical formula; otherwise,
         * the value is the same as the expression.
        */ 
+        for cell in self.cells.iter_mut().flatten().filter(|c| c.name.is_some()){
+
+            let first_char = cell.expression.chars().nth(0);
+
+            if let Some(f_c) = first_char{
+
+                if f_c == '='{
+                    //TODO: FORMULA EVALUATION
+                }else{
+                    match cell.expression.parse::<f64>(){
+                        Ok(parsed_value) => cell.value = ValueType::Numeric(parsed_value),
+                        Err(_)           => cell.value = ValueType::Literal(cell.expression.clone()),
+                    }
+                }
+
+            }else{
+                cell.value = ValueType::Numeric(0.0);
+            }
+
+        }
 
         //TEMPORARY
         Ok(())
