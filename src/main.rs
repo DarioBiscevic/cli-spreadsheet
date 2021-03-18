@@ -107,22 +107,4 @@ fn parse_args() -> Result<Settings>{
 
     }
 
-
-
-    /*
-    let args: Vec<String> = env::args().collect();
-
-    if args.len() < 3 {
-        Err(())
-    }else{
-
-        if args[1] == "load"{
-            return Ok(Settings::Load(args[2].clone()))
-        }else if args[1] == "create"{
-            return Ok(Settings::Create(args[2].clone()))
-        }
-
-        Err(())
-    }
-    */
 }
