@@ -125,3 +125,11 @@ fn save(sheet: &Spreadsheet){
         Ok(_) => println!("Successfully saved in {}", display),
     }
 }
+
+
+#[cfg(test)]
+mod tests_lib{
+
+    use super::*;
+
+}

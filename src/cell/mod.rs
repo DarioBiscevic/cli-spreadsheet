@@ -55,3 +55,11 @@ impl std::fmt::Display for ValueType{
         }
     }
 }
+
+
+#[cfg(test)]
+mod tests_cell{
+
+    use super::*;
+
+}

@@ -176,3 +176,11 @@ impl Spreadsheet{
         Ok(())
     }
 }
+
+
+#[cfg(test)]
+mod tests_spreadsheet{
+
+    use super::*;
+
+}
