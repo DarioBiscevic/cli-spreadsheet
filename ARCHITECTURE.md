@@ -1,4 +1,13 @@
 # Architecture
+## General flow
+- Load/create spreadsheet
+- While active:
+	- Wait for command
+	- Execute command
+	- Evaluate cells
+- Ask for save
+- Act accordingly and exit
+	
 
 ## Files
 - **src/main.rs**: argument parsing and external error handling
