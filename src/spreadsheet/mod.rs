@@ -41,7 +41,7 @@ impl Spreadsheet{
     ///B4: <B4's expression>
     ///
     ///    <B4's value>
-    pub fn view(&self, cell_arg: Option<&str>){
+    pub fn view(&self, cell_arg: Option<&&str>){
         if let Some(cell) = cell_arg{
 
             if let Some((x_coord, y_coord)) = Spreadsheet::parse_cell_name(cell){
@@ -73,7 +73,7 @@ impl Spreadsheet{
     ///
     ///A2's expression becomes "42"
     ///
-    pub fn set(&mut self, cell_arg: Option<&str>, expression_arg: Option<&str>){
+    pub fn set(&mut self, cell_arg: Option<&&str>, expression_arg: Option<&&str>){
 
         if let Some(cell) = cell_arg{
 
