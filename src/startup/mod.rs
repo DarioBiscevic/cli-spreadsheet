@@ -12,3 +12,11 @@ pub fn loader(filename: String) -> Spreadsheet{
 pub fn creator(filename: String) -> Spreadsheet{
     Spreadsheet::new(filename, CELLS)
 }
+
+
+#[cfg(test)]
+mod tests_startup{
+
+    use super::*;
+
+}

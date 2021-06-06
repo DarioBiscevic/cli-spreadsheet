@@ -17,17 +17,18 @@ pub fn run(sheet: &mut Spreadsheet){
 
         if let Ok(command) = input_result{
 
-            //TODO: ad hoc function to split the input in different parts
-            let mut arguments = command.split(' '); //TODO: split properly --> "set a4 "42 7 +" "=> "set"  "a4"  ""42 7 +""
+            
+            let arguments = split_arguments(&command); //Just a temporary variable
+            let mut arguments = arguments.iter();
 
             //"arguments" is used as a "stack"; with ".next()" a value is popped as an Option<T>
             match arguments.next(){
-                Some("")            => {},
-                Some("exit")        => is_looping = false,
-                Some("view")        => sheet.view(arguments.next()),
-                Some("set")         => sheet.set(arguments.next(), arguments.next()),
-                Some(wrong_command) => println!("Command {:?} not recognised", wrong_command),
-                _                   => {},
+                Some(&"")            => {},
+                Some(&"exit")        => is_looping = false,
+                Some(&"view")        => sheet.view(arguments.next()),
+                Some(&"set")         => sheet.set(arguments.next(), arguments.next()),
+                Some(wrong_command)  => println!("Command {:?} not recognised", wrong_command),
+                _                    => {},
             }
 
             //TODO: evaluation function
@@ -70,6 +71,36 @@ pub fn run(sheet: &mut Spreadsheet){
         }
     }
 }
+
+///Parses the input, creating a vector with parts of the command
+fn split_arguments(input: &String) -> Vec<&str>{
+
+    let mut output = Vec::new();
+
+    //Separate what is in brackets from what is outside the brackets
+    let first_split = input.split("\"").collect::<Vec<_>>();
+
+    //No command should ever begin with brackets, hence the first element of 'first_split' should
+    //be outside brackets --> split it
+    if first_split.len() > 0{
+        let iterator = first_split[0].split(' ');
+
+        for elem in iterator{
+            if !elem.is_empty(){
+                output.push(elem);
+            }
+        }
+
+    }
+
+    //The last element, if exists, should be in brackets
+    if first_split.len() > 1{
+        output.push(first_split[1]);
+    }
+
+    output
+}
+
 
 ///Gets user input.
 fn command_input() -> Result<String, Box<dyn std::error::Error>>{
@@ -124,4 +155,41 @@ fn save(sheet: &Spreadsheet){
         Err(why) => panic!("Failed to save in {}: {}", display, why),
         Ok(_) => println!("Successfully saved in {}", display),
     }
+}
+
+
+#[cfg(test)]
+mod tests_lib{
+
+    use super::*;
+
+    #[test]
+    fn test_split_empty(){
+        let input = String::from("");
+        let empty: Vec<&str> = Vec::new();
+
+        assert_eq!(split_arguments(&input), empty);
+    }
+
+    #[test]
+    fn test_split_exit(){
+        let input = String::from("exit");
+
+        assert_eq!(split_arguments(&input), vec!["exit"]);
+    }
+
+    #[test]
+    fn test_split_set(){
+        let input = String::from("set a4 \"43 2 +\"");
+
+        assert_eq!(split_arguments(&input), vec!["set", "a4", "43 2 +"]);
+    }
+
+    #[test]
+    fn test_split_view(){
+        let input = String::from("view b6");
+
+        assert_eq!(split_arguments(&input), vec!["view", "b6"]);
+    }   
+
 }
